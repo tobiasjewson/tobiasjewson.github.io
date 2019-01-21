@@ -1,0 +1,162 @@
+body {
+    /* background-color: hsl(35, 9%, 93%); */
+    color: #222;
+    /* color: hsl(35, 9%, 11%); */
+    font-family: 'Roboto', sans-serif;
+    /* font-size: 0.8em; */
+    line-height: 1.25;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    /* column-gap: 1.25em; */
+    column-gap: 0.625em;
+    margin-right: auto;
+    padding: 1.25em;
+}
+
+.half-width {
+    grid-column: span 4;
+}
+
+.centre-narrow {
+    grid-column: 2 / span 6;
+}
+
+.centre-wide {
+    grid-column: span 8;
+}
+
+.error {
+    grid-column: span 2;
+    margin: 0 0 0.625em;
+}
+
+@media (min-width: 576px) {
+    body {
+        font-size: 1.125em;
+    }
+
+    .error {
+        grid-column: span 1;
+    }
+
+    .centre-narrow {
+        grid-column: 3 / span 4;
+    }
+
+    .centre-wide {
+        grid-column: 2 / span 6;
+    }
+}
+
+@media (min-width: 768px) {
+    .wrapper {
+        width: calc(60% - 2.5em);
+        max-width: 650px;
+    }
+
+    .fixed {
+        position: fixed;
+        top: 1.25em;
+        right: 1.25em;
+        width: calc(40% - 1.25em);
+        max-width: 54vh;
+    }
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+ol {
+    grid-column: span 8;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: normal;
+    margin: 0 0 0.625em;
+}
+
+h2 {
+    font-size: 1em;
+    font-weight: 500;
+    margin: 1.25em 0;
+}
+
+h3 {
+    font-size: 0.78em;
+    /* font-size: 1em; */
+    font-weight: 500;
+    margin: 1.25em 0 0;
+}
+
+.italic {
+    font-style: italic;
+}
+
+p {
+    margin: 0 0 1.25em;
+}
+
+a {
+    /* color: #282828; */
+    color: rgb(25, 18, 217);
+    /* color: hsl(232, 85%, 44%); */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+ol {
+    list-style: none;
+    margin: 0 -0.325em 1.25em;
+    padding: 0;
+    font-size: 0.78em;
+}
+
+li {
+    padding: 0.15em 0.325em;
+    word-break: break-all;
+}
+
+li:target {
+    /* background-color: #282828; */
+    background-color: rgb(25, 18, 217);
+    /* background-color: hsl(232, 85%, 44%); */
+}
+
+li:target a {
+    color: #fff;
+}
+
+figure {
+    margin: 0 0 1.25em;
+}
+
+figcaption {
+    font-size: 0.78em;
+    /* margin: 0.625em 0 0; */
+    margin: 0.4em 0 0;
+    overflow-wrap: break-word;
+}
+
+img,
+video {
+    max-width: 100%;
+}
+
+.card-wrapper {
+    padding: 1.25em;
+    width: calc(100% - 2.5em);
+    max-width: 750px;
+}
+
+.card-wrapper h2 {
+    margin: 0;
+}

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Proof of Work</title>
+    <meta name="description" content="A project exploring the possibility of using the notion of proof of work for artistic purposes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Proof of Work</h1>
+
+        <p>&mdash; A study in digital materiality and finding value in randomness</p>
+        
+        <p>
+            Between 1501 and 1504 Michelangelo carved the over five-metre-tall statue of David from a single block of marble. This great masterpiece of Renaissance sculpture has become one of the most recognisable pieces of art. Through its material presence, the sculpture makes evident the labour and craft that went into its creation. However, few of us get to view the actual sculpture, most of us experience it through images on a screen. Yet, we still recognise the embodied effort. But what of the actual object most of us come in contact with, the image, the JPEG itself. Does it too embody the labour of its making and does it too have a materiality in its own right?
+        </p>
+        <p>
+            By design, the answer to both these questions would appear to be no. The ease of digital reproduction renders the labour in any one instance effectively zero. The success of JPEG as a medium relies on the very absence of materiality to facilitate transmission. Proof of Work is an attempt at altering the answer to these questions. By deliberately corrupting the compressed image data, the resulting errors reveal the underlying JPEG encoding. Digital materiality, understood here as the specific constraints of a medium influencing the appearance, emerges.
+        </p>
+        <p>
+            A single image of David is presented here as the final outcome. The image is the result of a random process and by extension the image too is random. So why choose this particular version over all others? The name Prof of Work is taken from a cryptographic puzzle used in Bitcoin and other cryptocurrencies. The only way to solve the puzzle is to try answers at random and the problem is formulated in a way that it takes a predictable number of attempts to solve it. David is the answer to one such puzzle formulated to imbue this particular instance with a measure of work.
+        </p>
+        <p>
+            The text that follows is a more in-depth look at the main technical explorations of the project. First a section on <a href="#randomness-and-large-numbers">proof of work</a> and then a section on the <a href="#digital-materiality">digital materiality</a> of JPEGs.
+        </p>
+
+        <figure class="fixed centre-wide">
+            <img src="assets/images/00000000040c2cdd1ead096506e9a75f39d3f6f0c1de1bee500476914597fa9e.jpg" alt="David, proof of work digest: 00000000040c2cdd1ead096506e9a75f39d3f6f0c1de1bee500476914597fa9e"/>
+            <figcaption>David<br>
+                hash: 00000000040c2cdd1ead096506e9a75f39d3f6f0c1de1bee500476914597fa9e<br>
+                iterations: 24,537,468,650<br>
+                duration: 7d 9h 41m 36s
+            </figcaption>
+        </figure>
+
+        <h2 id="randomness-and-large-numbers">Randomness and large numbers</h2>
+        <p>
+            A proof of work<sup>[<a href="#fn1" id="ref1">1</a>]</sup> can be described as a piece of data that is statistically difficult to produce but easy to verify. The Bitcoin cryptocurrency uses a proof of work system based on a version of the Hashcash<sup>[<a href="#fn2" id="ref2">2</a>]</sup> algorithm to secure its public ledger in a distributed, trustless setting. The same algorithm is used here to evaluate different permutations of David.
+        </p>
+        <p>
+            A hash function<sup>[<a href="#fn3" id="ref3">3</a>]</sup> takes a variable size input and maps it to a fixed size output. A good hash function should be, deterministic, uniform and quick. The same input should always yield the same output. The input domain should yield outputs that that are evenly spread across the output range and it should be cheap to compute. A cryptographic hash function<sup>[<a href="#fn4" id="ref4">4</a>]</sup> have additional requirements. It should be infeasible to predict the input knowing only the output and a small change in input should result in a large change in output, significant enough for the outputs to appear uncorrelated.
+        </p>
+        <p>
+            The version of the Hashcash algorithm used here requires one to find some input, that when passed twice through the SHA-256 function, produces an output (hash) which is smaller than some target value. Since SHA-256 is a cryptographic hash function there is no more efficient way to do this than simply iterating through possible inputs until the desired output is found. If the hash (a 256-bit value) is formatted as a hexadecimal string it takes on average 16^n attempts to find a hash with at least n leading zeros. To find a hash with at least three leading zeros takes on average 4,096 attempts, finding one with four takes 65,536 attempts and so on.
+        </p>
+        <p>
+            To add a block to the Bitcoin blockchain one is required to find a hash with (at the time of writing) at least 18 leading zeros. This number is set such that it takes approximately 10 minutes for the network of miners to find a solution<sup>[<a href="#fn5" id="ref5">5</a>]</sup>. The Initial intention was to use the same target for the image of David. However, a now obvious oversite was to not appreciate that the while it may only take the Bitcoin network, a global network of specialised hardware consuming about the same amount of energy as the entirety of Ireland<sup>[<a href="#fn6" id="ref6">6</a>]</sup>, 10 minutes to find a solution, it would take a single machine significantly longer. To find a hash with at least 18 leading zeros requires on average 4,722,366,482,869,645,213,696 attempts, that’s 4.7 sextillion or approximately 3.9 billion years on a 16 x 3.00GHz core machine at 38358 hashes/second.
+        </p>
+        <p>
+            The name Proof of Work appears ironic, almost cynical in relation to the throwaway nature of the actual work involved. A statistically provable measure of time or more accurately clock cycles wasted. If a digital artefact outside the world of cryptocurrencies was to be ascribed work in this way, would this give it some innate value? While it took billions of iterations to find this particular incarnation of David, once found, it can be multiplied in an instant and so the original irony persists.
+        </p>
+
+        <h2 id="digital-materiality">Digital Materiality</h2>
+        <p>
+            JPEG glitch tools like the ones by Justin Windle<sup>[<a href="#fn7" id="ref7">7</a>]</sup> and Georg Fischer<sup>[<a href="#fn8" id="ref8">8</a>]</sup> show how resilient the JPEG decoders found in web browsers are to corrupt input. They served as inspiration for writing a program<sup>[<a href="#fn9" id="ref9">9</a>]</sup> that progressively corrupts a JPEG image and feeds it to a hashing function keeping track of the lowest found hash.
+        </p>
+        <p>
+            The program locates the entropy-coded image data (more on this below) and alters it by flipping a single bit at a time in random order. When a maximum number of bits have been flipped the image is reset back to the original before proceeding to ensure that the image remains parsable.
+        </p>
+
+        <figure class="half-width">
+            <video autoplay loop controls muted controls src="assets/videos/1000-iterations.mp4">
+                Sorry, your browser doesn't support embedded videos.
+            </video>
+            <figcaption>A sequence of 1000 random bits being flipped one at a time and the resulting accumulation of errors</figcaption>
+        </figure>
+
+        <figure class="half-width">
+            <video autoplay loop muted controls src="assets/videos/decreasing-digests.mp4">
+                Sorry, your browser doesn't support embedded videos.
+            </video>
+            <figcaption>A sequence of decreasing hashes. As described above there is no predictable correlation between the input (the number of bits flipped) and the resulting hash.</figcaption>
+        </figure>
+
+        <p>
+            When encoding an image as a JPEG file it is first converted from RGB to Y′CbCr space<sup>[<a href="#fn10" id="ref10">10</a>]</sup>. This space represents each pixel in terms of three channels, luminance (brightness), blue-difference (blue to yellow) and red-difference (red to green). The image is then split into 8x8 pixel blocks. Each block is then encoded as the summation of 64 wave patterns (basis functions) per channel using a process called discrete cosine transform (DCT)<sup>[<a href="#fn11" id="ref11">11</a>]</sup>. The basis functions are predefined as part of the JPEG standard so what is stored in the file is the amplitude (coefficient) for each function in the summation. The first of the 64 functions (the upper left corner in the image below) is completely flat and describes the average value across the pixel block. This is called the DC coefficient and is stored as an offset relative to the preceding pixel block. The remaining 63 functions are called AC coefficients; these are stored as absolute values.
+        </p>
+
+        <figure class="centre-narrow">
+            <img src="assets/images/dct-8x8.png" alt="The 64 basis functions used to encode each 8x8 block of pixels"/>
+            <figcaption>The 64 basis functions used to encode each 8x8 block of pixels</figcaption>
+        </figure>
+
+        <p>
+            Our visual perception is not very sensitive to high-frequency information. This is exploited by the lossy part of JPEG compression. Each of the 64 coefficients is quantized<sup>[<a href="#fn12" id="ref12">12</a>]</sup> by dividing it by a corresponding factor and then rounding to the nearest integer, thus removing some of the information. The coefficients corresponding to the higher frequencies (which are less important to the perception of the image) are divided by larger factors often turning the coefficients to zero, completely removing them from the image.
+        </p>
+        <p>
+            The quantized coefficients are run-length encoded and Huffman coded (referred to collectively as entropy coding in the context of JPEG)<sup>[<a href="#fn13" id="ref13">13</a>]</sup>. Run-length encoding allows sequences of zero value coefficients (resulting from the quantization step) to be replaced with a single symbol indicating the length the of the sequence preceding a non-zero coefficient, followed by an amplitude. These symbols are then encoded in a Huffman table, a type of lookup table allowing the most common values to be stored with the least number of bits<sup>[<a href="#fn14" id="ref14">14</a>]</sup>.
+        </p>
+        <p>
+            When flipping a bit in the entropy coded data it alters the lookup which can have one of several effects. It can alter the coefficient, increasing or decreasing the weight of that particular basis function. It can alter the number of zeros preceding an amplitude, effectively shifting which basis function the coefficient applies to. Or it can cause the lookup to fail completely. Because Huffman coding is a variable length encoding, altering a single bit will have a knock-on effect on parsing subsequent values. The way DC coefficients are stored as a relative offset also contribute to the errors propagating across the image. To improve the resilience of the parsing, reset markers can be inserted at intervals of x number of blocks<sup>[<a href="#fn15" id="ref15">15</a>]</sup> and programs such as Photoshop will typically insert one at the start of each row of blocks. At these intervals, the DC coefficients are stored as absolute values and the parser is able to restart.
+        </p>
+        <p>
+            All of these errors can be seen in the image of David. Most evident is the striation from errors compounding across a row of blocks until a reset marker is hit. The wave patterns of individual basis functions appear oscillating, black-white, blue- yellow, and red-green where the coefficients and basis functions have fallen out of sync. Finally, rows are truncated as lookup failures cause some blocks to discarded in their entirety.
+        </p>
+
+        <p>&mdash; <a href="index.html">Tobias Jewson</a>, Oct 2018</p>
+
+        <h3>References</h3>
+        <ol>
+            <li id="fn1"><a href="#ref1">[1]</a> <a href="https://en.wikipedia.org/wiki/Proof-of-work_system">https://en.wikipedia.org/wiki/Proof-of-work_system</a></li>
+            <li id="fn2"><a href="#ref2">[2]</a> <a href="https://en.wikipedia.org/wiki/Hashcash">https://en.wikipedia.org/wiki/Hashcash</a></li>
+            <li id="fn3"><a href="#ref3">[3]</a> <a href="https://en.wikipedia.org/wiki/Hash_function#Properties">https://en.wikipedia.org/wiki/Hash_function#Properties</a></li>
+            <li id="fn4"><a href="#ref4">[4]</a> <a href="https://en.wikipedia.org/wiki/Cryptographic_hash_function#Properties">https://en.wikipedia.org/wiki/Cryptographic_hash_function#Properties</a></li>
+            <li id="fn5"><a href="#ref5">[5]</a> <a href="https://en.bitcoin.it/wiki/Target">https://en.bitcoin.it/wiki/Target</a></li>
+            <li id="fn6"><a href="#ref6">[6]</a> <a href="https://arstechnica.com/tech-policy/2018/05/new-study-quantifies-bitcoins-ludicrous-energy-consumption/">https://arstechnica.com/tech-policy/2018/05/new-study-quantifies-bitcoins-ludicrous-energy-consumption/</a></li>
+            <li id="fn7"><a href="#ref7">[7]</a> <a href="https://soulwire.co.uk/smack-my-glitch-up/">https://soulwire.co.uk/smack-my-glitch-up/</a></li>
+            <li id="fn8"><a href="#ref8">[8]</a> <a href="https://snorpey.github.io/jpg-glitch/
+                ">https://snorpey.github.io/jpg-glitch/</a></li>
+            <li id="fn9"><a href="#ref9">[9]</a> <a href="https://github.com/tobiasjewson/proof-of-work">https://github.com/tobiasjewson/proof-of-work</a></li>
+            <li id="fn10"><a href="#ref10">[10]</a> <a href="https://en.wikipedia.org/wiki/YCbCr">https://en.wikipedia.org/wiki/YCbCr</a></li>
+            <li id="fn11"><a href="#ref11">[11]</a> <a href="https://en.wikipedia.org/wiki/Discrete_cosine_transform">https://en.wikipedia.org/wiki/Discrete_cosine_transform</a></li>
+            <li id="fn12"><a href="#ref12">[12]</a> <a href="https://en.wikipedia.org/wiki/JPEG#Quantization">https://en.wikipedia.org/wiki/JPEG#Quantization</a></li>
+            <li id="fn13"><a href="#ref13">[13]</a> <a href="https://en.wikipedia.org/wiki/JPEG#Entropy_coding">https://en.wikipedia.org/wiki/JPEG#Entropy_coding</a></li>
+            <li id="fn14"><a href="#ref14">[14]</a> <a href="https://en.wikipedia.org/wiki/Huffman_coding">https://en.wikipedia.org/wiki/Huffman_coding</a></li>
+            <li id="fn15"><a href="#ref15">[15]</a> <a href="https://en.wikipedia.org/wiki/JPEG#Syntax_and_structure">https://en.wikipedia.org/wiki/JPEG#Syntax_and_structure</a></li>
+        </ol>
+
+        <h2>A Catalogue of Errors</h2>
+        <img class="error" src="assets/catalogue/error-00.png" alt="error no. 00"/>
+        <img class="error" src="assets/catalogue/error-01.png" alt="error no. 01"/>
+        <img class="error" src="assets/catalogue/error-02.png" alt="error no. 02"/>
+        <img class="error" src="assets/catalogue/error-03.png" alt="error no. 03"/>
+        <img class="error" src="assets/catalogue/error-04.png" alt="error no. 04"/>
+        <img class="error" src="assets/catalogue/error-05.png" alt="error no. 05"/>
+        <img class="error" src="assets/catalogue/error-06.png" alt="error no. 06"/>
+        <img class="error" src="assets/catalogue/error-07.png" alt="error no. 07"/>
+        <img class="error" src="assets/catalogue/error-08.png" alt="error no. 08"/>
+        <img class="error" src="assets/catalogue/error-09.png" alt="error no. 09"/>
+        <img class="error" src="assets/catalogue/error-10.png" alt="error no. 10"/>
+        <img class="error" src="assets/catalogue/error-11.png" alt="error no. 11"/>
+        <img class="error" src="assets/catalogue/error-12.png" alt="error no. 12"/>
+        <img class="error" src="assets/catalogue/error-13.png" alt="error no. 13"/>
+        <img class="error" src="assets/catalogue/error-14.png" alt="error no. 14"/>
+        <img class="error" src="assets/catalogue/error-15.png" alt="error no. 15"/>
+        <img class="error" src="assets/catalogue/error-16.png" alt="error no. 16"/>
+        <img class="error" src="assets/catalogue/error-17.png" alt="error no. 17"/>
+        <img class="error" src="assets/catalogue/error-18.png" alt="error no. 18"/>
+        <img class="error" src="assets/catalogue/error-19.png" alt="error no. 19"/>
+        <img class="error" src="assets/catalogue/error-20.png" alt="error no. 20"/>
+        <img class="error" src="assets/catalogue/error-21.png" alt="error no. 21"/>
+        <img class="error" src="assets/catalogue/error-22.png" alt="error no. 22"/>
+        <img class="error" src="assets/catalogue/error-23.png" alt="error no. 23"/>
+        <img class="error" src="assets/catalogue/error-24.png" alt="error no. 24"/>
+        <img class="error" src="assets/catalogue/error-25.png" alt="error no. 25"/>
+        <img class="error" src="assets/catalogue/error-26.png" alt="error no. 26"/>
+        <img class="error" src="assets/catalogue/error-27.png" alt="error no. 27"/>
+        <img class="error" src="assets/catalogue/error-28.png" alt="error no. 28"/>
+        <img class="error" src="assets/catalogue/error-29.png" alt="error no. 29"/>
+        <img class="error" src="assets/catalogue/error-30.png" alt="error no. 30"/>
+        <img class="error" src="assets/catalogue/error-31.png" alt="error no. 31"/>
+        <img class="error" src="assets/catalogue/error-32.png" alt="error no. 32"/>
+        <img class="error" src="assets/catalogue/error-33.png" alt="error no. 33"/>
+        <img class="error" src="assets/catalogue/error-34.png" alt="error no. 34"/>
+        <img class="error" src="assets/catalogue/error-35.png" alt="error no. 35"/>
+        <img class="error" src="assets/catalogue/error-36.png" alt="error no. 36"/>
+        <img class="error" src="assets/catalogue/error-37.png" alt="error no. 37"/>
+        <img class="error" src="assets/catalogue/error-38.png" alt="error no. 38"/>
+        <img class="error" src="assets/catalogue/error-39.png" alt="error no. 39"/>
+        <img class="error" src="assets/catalogue/error-40.png" alt="error no. 40"/>
+        <img class="error" src="assets/catalogue/error-41.png" alt="error no. 41"/>
+        <img class="error" src="assets/catalogue/error-42.png" alt="error no. 42"/>
+        <img class="error" src="assets/catalogue/error-43.png" alt="error no. 43"/>
+        <img class="error" src="assets/catalogue/error-44.png" alt="error no. 44"/>
+        <img class="error" src="assets/catalogue/error-45.png" alt="error no. 45"/>
+        <img class="error" src="assets/catalogue/error-46.png" alt="error no. 46"/>
+        <img class="error" src="assets/catalogue/error-47.png" alt="error no. 47"/>
+        <img class="error" src="assets/catalogue/error-48.png" alt="error no. 48"/>
+        <img class="error" src="assets/catalogue/error-49.png" alt="error no. 49"/>
+        <img class="error" src="assets/catalogue/error-50.png" alt="error no. 50"/>
+        <img class="error" src="assets/catalogue/error-51.png" alt="error no. 51"/>
+        <img class="error" src="assets/catalogue/error-52.png" alt="error no. 52"/>
+        <img class="error" src="assets/catalogue/error-53.png" alt="error no. 53"/>
+        <img class="error" src="assets/catalogue/error-54.png" alt="error no. 54"/>
+        <img class="error" src="assets/catalogue/error-55.png" alt="error no. 55"/>
+        <img class="error" src="assets/catalogue/error-56.png" alt="error no. 56"/>
+        <img class="error" src="assets/catalogue/error-57.png" alt="error no. 57"/>
+        <img class="error" src="assets/catalogue/error-58.png" alt="error no. 58"/>
+        <img class="error" src="assets/catalogue/error-59.png" alt="error no. 59"/>
+        <img class="error" src="assets/catalogue/error-60.png" alt="error no. 60"/>
+        <img class="error" src="assets/catalogue/error-61.png" alt="error no. 61"/>
+        <img class="error" src="assets/catalogue/error-62.png" alt="error no. 62"/>
+        <img class="error" src="assets/catalogue/error-63.png" alt="error no. 63"/>
+        <img class="error" src="assets/catalogue/error-64.png" alt="error no. 64"/>
+        <img class="error" src="assets/catalogue/error-65.png" alt="error no. 65"/>
+        <img class="error" src="assets/catalogue/error-66.png" alt="error no. 66"/>
+        <img class="error" src="assets/catalogue/error-67.png" alt="error no. 67"/>
+        <img class="error" src="assets/catalogue/error-68.png" alt="error no. 68"/>
+        <img class="error" src="assets/catalogue/error-69.png" alt="error no. 69"/>
+        <img class="error" src="assets/catalogue/error-70.png" alt="error no. 70"/>
+        <img class="error" src="assets/catalogue/error-71.png" alt="error no. 71"/>
+        <img class="error" src="assets/catalogue/error-72.png" alt="error no. 72"/>
+        <img class="error" src="assets/catalogue/error-73.png" alt="error no. 73"/>
+        <img class="error" src="assets/catalogue/error-74.png" alt="error no. 74"/>
+        <img class="error" src="assets/catalogue/error-75.png" alt="error no. 75"/>
+        <img class="error" src="assets/catalogue/error-76.png" alt="error no. 76"/>
+        <img class="error" src="assets/catalogue/error-77.png" alt="error no. 77"/>
+        <img class="error" src="assets/catalogue/error-78.png" alt="error no. 78"/>
+        <img class="error" src="assets/catalogue/error-79.png" alt="error no. 79"/>
+        <img class="error" src="assets/catalogue/error-80.png" alt="error no. 80"/>
+        <img class="error" src="assets/catalogue/error-81.png" alt="error no. 81"/>
+        <img class="error" src="assets/catalogue/error-82.png" alt="error no. 82"/>
+        <img class="error" src="assets/catalogue/error-83.png" alt="error no. 83"/>
+        <img class="error" src="assets/catalogue/error-84.png" alt="error no. 84"/>
+        <img class="error" src="assets/catalogue/error-85.png" alt="error no. 85"/>
+        <img class="error" src="assets/catalogue/error-86.png" alt="error no. 86"/>
+        <img class="error" src="assets/catalogue/error-87.png" alt="error no. 87"/>
+        <img class="error" src="assets/catalogue/error-88.png" alt="error no. 88"/>
+        <img class="error" src="assets/catalogue/error-89.png" alt="error no. 89"/>
+        <img class="error" src="assets/catalogue/error-90.png" alt="error no. 90"/>
+        <img class="error" src="assets/catalogue/error-91.png" alt="error no. 91"/>
+        <img class="error" src="assets/catalogue/error-92.png" alt="error no. 92"/>
+        <img class="error" src="assets/catalogue/error-93.png" alt="error no. 93"/>
+        <img class="error" src="assets/catalogue/error-94.png" alt="error no. 94"/>
+        <img class="error" src="assets/catalogue/error-95.png" alt="error no. 95"/>
+
+    </div>
+</body>
+</html>
