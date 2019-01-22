@@ -1,11 +1,58 @@
 <!DOCTYPE html>
 <html lang="en-GB">
-<head>
+<head>    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132738904-1"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        window['ga-disable-UA-132738904-1'] = true;
+
+        window.addEventListener('load', function(){
+        window.cookieconsent.initialise({
+        palette: {
+            popup: {
+                background: '#1912d9',
+                text: '#fff'
+            },
+            button: {
+                background: 'transparent',
+                text: '#fff',
+                border: '#fff'
+            }
+        },
+        showLink: false,
+        content: {
+            message: 'This website uses cookies to analyse traffic.',
+            dismiss: 'OK'
+        },
+        onInitialise: function (status) {
+            if (this.hasConsented()) {
+                window['ga-disable-UA-132738904-1'] = false;
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'UA-132738904-1', { 'anonymize_ip': true });
+            }
+        },
+        onStatusChange: function (status) {
+            if (this.hasConsented()) {
+                window['ga-disable-UA-132738904-1'] = false;
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'UA-132738904-1', { 'anonymize_ip': true });
+            }
+        }
+    })});
+    </script>
+    
     <title>Proof of Work</title>
     <meta name="description" content="A project exploring the possibility of using the notion of proof of work for artistic purposes">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" type="text/css" media="screen" href="css/normalize.css">
     <link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -25,9 +72,6 @@
         <p>
             A single image of David is presented here as the final outcome. The image is the result of a random process and by extension the image too is random. So why choose this particular version over all others? The name Prof of Work is taken from a cryptographic puzzle used in Bitcoin and other cryptocurrencies. The only way to solve the puzzle is to try answers at random and the problem is formulated in a way that it takes a predictable number of attempts to solve it. David is the answer to one such puzzle formulated to imbue this particular instance with a measure of work.
         </p>
-        <p>
-            The text that follows is a more in-depth look at the main technical explorations of the project. First a section on <a href="#randomness-and-large-numbers">proof of work</a> and then a section on the <a href="#digital-materiality">digital materiality</a> of JPEGs.
-        </p>
 
         <figure class="fixed centre-wide">
             <img src="assets/images/00000000040c2cdd1ead096506e9a75f39d3f6f0c1de1bee500476914597fa9e.jpg" alt="David, proof of work digest: 00000000040c2cdd1ead096506e9a75f39d3f6f0c1de1bee500476914597fa9e"/>
@@ -37,6 +81,10 @@
                 duration: 7d 9h 41m 36s
             </figcaption>
         </figure>
+
+        <p>
+            The text that follows is a more in-depth look at the main technical explorations of the project. First a section on <a href="#randomness-and-large-numbers">proof of work</a> and then a section on the <a href="#digital-materiality">digital materiality</a> of JPEGs.
+        </p>
 
         <h2 id="randomness-and-large-numbers">Randomness and large numbers</h2>
         <p>

@@ -160,3 +160,9 @@ video {
 .card-wrapper h2 {
     margin: 0;
 }
+
+.cc-window {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1em;
+    line-height: 1em;
+}
