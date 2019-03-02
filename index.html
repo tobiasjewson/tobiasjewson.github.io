@@ -3,6 +3,53 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132738904-1"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+    <script>
+        (function() {
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+
+            function cookieHandler(status) {
+                if (this.hasConsented()) {
+                    window["ga-disable-UA-132738904-1"] = false;
+                    window.dataLayer = window.dataLayer || [];
+
+                    gtag("js", new Date());
+                    gtag("config", "UA-132738904-1", { anonymize_ip: true });
+                }
+            }
+
+            window["ga-disable-UA-132738904-1"] = true;
+
+            window.addEventListener("load", function() {
+                window.cookieconsent.initialise({
+                    palette: {
+                        popup: {
+                            background: "#1912d9",
+                            text: "#fff"
+                        },
+                        button: {
+                            background: "transparent",
+                            text: "#fff",
+                            border: "#fff"
+                        }
+                    },
+                    content: {
+                        message: "This website uses cookies to analyse traffic.",
+                        dismiss: "OK"
+                    },
+                    showLink: false,
+                    onInitialise: cookieHandler,
+                    onStatusChange: cookieHandler
+                });
+            });
+        })();
+    </script>
+
     <title>Tobias Jewson</title>
     <meta name="description" content="Tobias Jewson">
     <meta name="viewport" content="width=device-width, initial-scale=1">
